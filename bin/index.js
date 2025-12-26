@@ -21,4 +21,26 @@ async function getGithubActivity() {
     }
 }
 
+function displayActivity(activityEvent, repository) {
+    const activity = activityEvent.slice("Event");
+    if (activity.toLowerCase().includes('push')) {
+        console.log(`---> Push commits to ${repository}`);
+    } else if (activity.toLowerCase().includes('pull')) {
+        console.log(`---> Pull Requests to ${repository}`);
+    } else if (activity.toLowerCase().includes('issues')) {
+        console.log(`---> Opened a new issue in ${repository}`);
+    } else {
+        console.log(`---> ${activity} in ${repository}`);
+    }
+}
+
 const result = await getGithubActivity();
+
+console.log(`Recent activity from ${username}`);
+result.forEach(element => {
+    const activity = element["type"];
+    const repo = element["repo"].name;
+
+    displayActivity(activity, repo);
+
+});
